@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Para mi María: Alejandra ✨💖</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Dancing+Script:wght@400;700&family=Quicksand:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --mexican-pink: #e91e63;
+            --marigold: #ff9800;
+            --candle-light: rgba(255, 180, 50, 0.3);
+            --gold: #d4af37;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
+        
+        body {
+            background: #1a0a05;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Quicksand', sans-serif;
+            overflow-x: hidden;
+            perspective: 1200px;
+            cursor: crosshair;
+        }
+
+        /* Fondo de velas y aura romántica */
+        .candle-flicker {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at center, var(--candle-light) 0%, transparent 75%);
+            animation: flicker 4s infinite alternate;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 0.25; transform: scale(1); }
+            30% { opacity: 0.5; transform: scale(1.05); }
+            70% { opacity: 0.35; transform: scale(1.02); }
+        }
+
+        /* Pétalos y flores */
+        .petal, .marigold {
+            position: fixed;
+            z-index: 2;
+            pointer-events: none;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-20vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
+
+        .floating-heart {
+            position: fixed;
+            z-index: 3;
+            pointer-events: none;
+            animation: floatHeart 8s infinite ease-in-out;
+            font-size: 1.8rem;
+            opacity: 0.6;
+        }
+
+        @keyframes floatHeart {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 0.2; }
+            50% { transform: translateY(-100px) scale(1.2); opacity: 0.8; }
+        }
+
+        /* Libro principal */
+        .book-container {
+            width: 92%;
+            max-width: 980px;
+            height: 750px;
+            background: #fdf1e0;
+            border-radius: 20px 50px 50px 20px;
+            box-shadow: 0 60px 120px rgba(0,0,0,0.8), inset 12px 0 25px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 20;
+            border: 6px solid #4a2511;
+            display: flex;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .book-spine {
+            width: 55px;
+            background: linear-gradient(135deg, #2c1508, #6a341c, #2c1508);
+            height: 100%;
+            box-shadow: 7px 0 18px rgba(0,0,0,0.4);
+            position: relative;
+        }
+        .book-spine::after {
+            content: "❤";
+            position: absolute;
+            bottom: 30px;
+            left: 15px;
+            font-size: 2rem;
+            color: var(--gold);
+            opacity: 0.6;
+            writing-mode: vertical-rl;
+        }
+
+        .content {
+            flex: 1;
+            padding: 40px 45px 30px 45px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background: radial-gradient(ellipse at center, #fff9ef, #fae9cf);
+            overflow-y: auto;
+        }
+
+        .page {
+            display: none;
+            height: 100%;
+            animation: pageFlip 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .page.active { display: flex; flex-direction: column; }
+
+        @keyframes pageFlip {
+            0% { opacity: 0; transform: rotateY(-25deg) scale(0.98); filter: blur(6px); }
+            100% { opacity: 1; transform: rotateY(0) scale(1); filter: blur(0); }
+        }
+
+        h2 {
+            font-family: 'Cinzel', serif;
+            color: #8b1e1e;
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            border-bottom: 3px double var(--gold);
+            display: inline-block;
+            align-self: center;
+            letter-spacing: 2px;
+            text-shadow: 1px 1px 2px rgba(255,215,0,0.3);
+        }
+
+        .text {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: #3a2418;
+            text-align: justify;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .highlight { color: #c0392b; font-weight: 800; text-shadow: 0 0 5px #ffb347; }
+        .quote { font-style: italic; border-left: 5px solid var(--gold); padding-left: 20px; margin: 15px 0; color: #b3491f; font-weight: 600; }
+
+        /* Botones */
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+        }
+
+        .btn {
+            background: #8b1e1e;
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-family: 'Cinzel';
+            font-weight: bold;
+            transition: 0.2s;
+            box-shadow: 0 5px 0 #471010;
+        }
+
+        .btn:hover:not(:disabled) { background: #e91e63; transform: translateY(-2px); box-shadow: 0 7px 0 #710e2b; }
+        .btn:disabled { opacity: 0.3; transform: none; }
+
+        .btn-yes {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            font-size: 2rem;
+            padding: 18px 45px;
+            font-family: 'Dancing Script';
+            font-weight: bold;
+            animation: heartBeat 1.2s infinite;
+            border: 2px solid gold;
+            border-radius: 80px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-yes:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px #ff4d6d;
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.07); text-shadow: 0 0 15px red; }
+            50% { transform: scale(1.03); }
+        }
+
+        /* Modal de aceptación romanticísimo */
+        .modal-accept {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.88);
+            backdrop-filter: blur(10px);
+            z-index: 200;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            animation: fadeZoom 0.5s ease;
+        }
+
+        .modal-content {
+            background: linear-gradient(145deg, #fff5e8, #ffe6d5);
+            padding: 45px 40px;
+            border-radius: 70px;
+            max-width: 580px;
+            width: 88%;
+            border: 5px solid #e91e63;
+            box-shadow: 0 0 100px #ff4d6d, inset 0 0 30px rgba(255,215,0,0.3);
+            position: relative;
+            animation: modalPop 0.6s cubic-bezier(0.34, 1.3, 0.64, 1);
+        }
+
+        @keyframes modalPop {
+            from { transform: scale(0.5) rotate(-5deg); opacity: 0; }
+            to { transform: scale(1) rotate(0); opacity: 1; }
+        }
+
+        @keyframes fadeZoom {
+            from { opacity: 0; backdrop-filter: blur(0);}
+            to { opacity: 1; backdrop-filter: blur(10px);}
+        }
+
+        .close-modal-btn {
+            background: #e91e63;
+            border: none;
+            color: white;
+            padding: 14px 38px;
+            border-radius: 60px;
+            font-size: 1.3rem;
+            font-family: 'Dancing Script';
+            font-weight: bold;
+            margin-top: 25px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 5px 0 #8b0e3e;
+        }
+
+        .close-modal-btn:hover {
+            transform: translateY(-2px);
+            background: #ff3366;
+            box-shadow: 0 7px 0 #8b0e3e;
+        }
+
+        footer {
+            font-size: 0.7rem;
+            text-align: center;
+            margin-top: 10px;
+            opacity: 0.6;
+        }
+        
+        /* decoración musical */
+        .music-note {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            font-size: 1.5rem;
+            color: #ffb347;
+            z-index: 25;
+            background: rgba(0,0,0,0.4);
+            border-radius: 50px;
+            padding: 5px 12px;
+            pointer-events: none;
+            animation: bounceNote 2s infinite;
+        }
+        
+        @keyframes bounceNote {
+            0%,100%{ transform: translateY(0);}
+            50%{ transform: translateY(-8px);}
+        }
+    </style>
+</head>
+<body>
+
+<div class="candle-flicker"></div>
+<div class="music-note"><i class="fas fa-music"></i> <i class="fas fa-heart" style="color:#ff4d6d;"></i></div>
+
+<div class="book-container">
+    <div class="book-spine"></div>
+    <div class="content">
+        
+        <!-- PÁGINA 1 - Más labia y romance -->
+        <div class="page active" id="p1">
+            <h2>🌙 El Libro de Alejandra 🌙</h2>
+            <p class="text">
+                Dicen que en el país de los vivos hay una nota que nunca muere, un eco que vibra cuando dos almas se reconocen.  
+                Antes de ti, mi guitarra lloraba en silencio, mis pétalos volaban sin rumbo. Pero entonces llegaste, <span class="highlight">Alejandra</span>, con tu risa que despierta hasta las estrellas.  
+                <br><br>
+                Como en <strong>"El libro de la vida"</strong> , yo tuve que elegir entre el miedo y el amor, y sin dudarlo escojo entregarte cada acorde de mi ser.  
+                <br><br>
+                <span class="quote">"No necesito una eternidad si tengo un solo segundo verdadero junto a ti"</span>  
+                Y en ese segundo, toda la memoria se viste de maravillas. Porque tú, Alejandra, eres mi canción favorita, mi refugio, mi latido preferido.
+                <br><br>
+                Desde que te vi supe que el destino me tenía reservado el mejor de los regalos: tu mirada, tu forma de caminar, la manera en que iluminas cada rincón oscuro. Eres poesía hecha mujer.
+            </p>
+        </div>
+
+        <!-- PÁGINA 2 - Mucho más texto romántico -->
+        <div class="page" id="p2">
+            <h2>✨ La Memoria del Corazón ✨</h2>
+            <p class="text">
+                Manolo luchó en la tierra de los olvidados, pero yo no temo al olvido porque tu nombre está grabado en mis huesos.  
+                Cada vez que el viento me trae tu perfume, recuerdo que la vida es un puente de cempasúchil y tú eres mi otro lado.  
+                <br><br>
+                Alejandra, admiro tu fuerza, esa mirada que desafía tormentas y esa forma de ser amable incluso cuando el mundo no lo es.  
+                <span class="highlight">Eres mi melodía favorita, la que nunca dejará de sonar.</span>  
+                He escrito mil cartas en mi mente, pero ninguna rima tanto como decir <strong>"te elijo a ti"</strong>.
+                <br><br>
+                Me encanta cómo ríes sin miedo, cómo tus ojos chispean cuando hablas de tus sueños. Eres esa chispa que enciende mi alma. Cada día a tu lado es una aventura nueva, una página en blanco que quiero llenar de besos, abrazos y promesas sinceras.  
+                No necesito un mapa porque ya encontré el tesoro: eres tú, con tus virtudes y tus imperfecciones, que para mí son perfectas.
+            </p>
+            <div style="text-align:center; margin-top:20px;">
+                <i class="fas fa-feather-alt" style="font-size: 2rem; color: #d4af37;"></i>
+                <i class="fas fa-music" style="font-size: 2rem; margin-left: 15px; color: #e91e63;"></i>
+            </div>
+        </div>
+
+        <!-- PÁGINA 3 - Más allá de las estrellas, texto más profundo -->
+        <div class="page" id="p3">
+            <h2>🌼 Más Allá de las Estrellas 🌼</h2>
+            <p class="text">
+                "Si puedes recordar quién eres, nadie podrá decirte quién ser". Y aunque el tiempo pase, yo recordaré cada mueca tuya, la forma en que cierras los ojos cuando ríes y cómo iluminas mis días grises.  
+                <br><br>
+                No necesito un pase mágico para volar, porque contigo siento que toco el cielo. Eres mi inspiración, mi fuerza y mi ternura.  
+                <span class="highlight">Alejandra, no soy perfecto, pero prometo amarte con mis aciertos y mis errores, como una canción eterna.</span>  
+                En esta historia no habrá villanos, solo dos almas que se encontraron para no soltarse jamás.
+                <br><br>
+                Pienso en tu futuro, en tus sueños, en todo lo que anhelas, y quiero estar ahí, a tu lado, animándote, sosteniéndote la mano en los días difíciles y celebrando contigo en los buenos. Porque el amor no solo es fuego, también es refugio. Y yo quiero ser tu casa, tu lugar seguro, tu 'siempre'.
+            </p>
+            <div class="quote">💬 "Tu nombre es un poema que recito cada mañana al despertar, esperando volver a verte brillar"</div>
+        </div>
+
+        <!-- PÁGINA 4: Declaración intensa + música de fondo -->
+        <div class="page" id="p4">
+            <h2>🎶 El Momento Más Esperado 🎶</h2>
+            <div style="flex:1; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 20px; text-align: center;">
+                <i class="fas fa-heartbeat" style="font-size: 4rem; color: #e91e63; animation: pulse 1.5s infinite;"></i>
+                <p class="text" style="text-align: center; font-weight: 600; font-size: 1.2rem;">
+                    Alejandra, desde el fondo de mi ser, con cada latido que late por ti...<br><br>
+                    <strong>¿Quieres hacer que mi mundo sea completo? ¿Aceptas ser mi compañera, mi novia, mi persona favorita en este universo?</strong><br><br>
+                    Prometo cuidarte, reír contigo, secar tus lágrimas y caminar a tu pase lo que pase. Eres lo más bonito que me ha pasado.
+                </p>
+                <div style="margin: 30px 0 20px;">
+                    <button class="btn-yes" id="bigYesBtn">¡SÍ, QUIERO SER TUYA! ❤️✨</button>
+                </div>
+                <footer style="margin-top: 20px;">🎧 Música de fondo: nuestra canción del destino 🎧</footer>
+            </div>
+        </div>
+
+        <div class="nav">
+            <button class="btn" id="prevBtn" disabled>◀ Anterior</button>
+            <button class="btn" id="nextBtn">Siguiente ▶</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL DE ACEPTACIÓN HERMOSO (sin captura) -->
+<div id="acceptModal" class="modal-accept">
+    <div class="modal-content">
+        <i class="fas fa-heart" style="font-size: 4rem; color: #e91e63; animation: heartBeat 1s infinite;"></i>
+        <h2 style="font-family: 'Dancing Script'; font-size: 3rem; margin: 20px 0;">💖 ¡GRACIAS, MI AMOR! 💖</h2>
+        <p style="font-size: 1.5rem; font-family: 'Cinzel'; color: #8b1e1e;">Sí, me aceptaste como tu pareja</p>
+        <div style="background: #ffefd5; border-radius: 40px; padding: 20px; margin: 20px 0;">
+            <i class="fas fa-check-circle" style="color: #2ecc71; font-size: 2rem;"></i>
+            <p style="font-size: 1.2rem; font-weight: bold;">¡Eres el sí más hermoso de mi vida! 💍</p>
+            <p style="margin-top: 10px;">Hoy comienza nuestra historia más bonita. Te amaré hoy, mañana y siempre. Eres mi luz, mi alegría, mi razón para sonreír.</p>
+            <p class="highlight" style="margin-top: 10px;">✨ Te amo, Alejandra ✨</p>
+        </div>
+        <button class="close-modal-btn" id="closeAcceptBtn"><i class="fas fa-kiss-wink-heart"></i> Cerrar y seguir soñando</button>
+    </div>
+</div>
+
+<audio id="musica" loop>
+    <source src="musica.mp3" type="audio/mpeg">
+    <!-- fallback silencioso si no carga -->
+</audio>
+
+<script>
+    let currentPage = 1;
+    const totalPages = 4;  // Solo 4 páginas, la declaración es la última (página 4)
+    const audio = document.getElementById('musica');
+    let musicAllowed = false;
+    let musicStarted = false;
+
+    // 🌸 Pétalos románticos y corazones flotantes
+    function spawnPetal() {
+        const petal = document.createElement('div');
+        petal.className = 'petal';
+        const emojis = ['🌸', '🌼', '🌺', '🌻', '❤️', '💖', '🌿', '✨', '🌟'];
+        petal.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        petal.style.left = Math.random() * 100 + 'vw';
+        petal.style.top = '-30px';
+        petal.style.fontSize = (Math.random() * 24 + 12) + 'px';
+        petal.style.animationDuration = (Math.random() * 4 + 3) + 's';
+        petal.style.opacity = Math.random() * 0.8 + 0.3;
+        document.body.appendChild(petal);
+        setTimeout(() => petal.remove(), 6000);
+    }
+
+    function spawnFloatingHeart() {
+        const heart = document.createElement('div');
+        heart.className = 'floating-heart';
+        heart.innerHTML = ['❤️', '💗', '💕', '💞', '🌟', '✨', '💖'][Math.floor(Math.random() * 6)];
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.bottom = '-20px';
+        heart.style.fontSize = (Math.random() * 30 + 15) + 'px';
+        heart.style.animationDuration = (Math.random() * 6 + 5) + 's';
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 8000);
+    }
+
+    setInterval(spawnPetal, 280);
+    setInterval(spawnFloatingHeart, 1300);
+
+    // Navegación
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    
+    // Control de música: solo en página 4 (declaración) y se reproduce automáticamente con interacción válida
+    function updatePage() {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('p' + currentPage).classList.add('active');
+        
+        prevBtn.disabled = currentPage === 1;
+        nextBtn.disabled = currentPage === totalPages;
+        
+        // Gestionar música en la página 4 declaración
+        if(currentPage === 4) {
+            // Intentar reproducir música si no ha empezado o está pausada
+            if (!musicStarted) {
+                // Pequeño truco: intentar reproducir con interacción previa del usuario (se activa con botones o clics)
+                audio.play().then(() => {
+                    musicStarted = true;
+                    musicAllowed = true;
+                }).catch(e => {
+                    console.log("Esperando interacción para música");
+                    // Si falla, esperamos a un click general
+                });
+            } else if (musicStarted && audio.paused) {
+                audio.play().catch(e => console.log());
+            }
+        } else {
+            // En otras páginas pausamos la música
+            if (audio && !audio.paused) {
+                audio.pause();
+                audio.currentTime = 0;
+                musicStarted = false; // Reiniciamos estado para que al volver suene desde inicio
+            }
+        }
+    }
+    
+    // Al hacer clic en cualquier parte del body si estamos en página 4 y la música no suena, la iniciamos
+    document.body.addEventListener('click', () => {
+        if(currentPage === 4 && audio && audio.paused && !musicStarted) {
+            audio.play().then(() => {
+                musicStarted = true;
+                musicAllowed = true;
+            }).catch(() => {});
+        }
+    }, { once: false });
+    
+    // Para el botón siguiente/anterior, también refrescamos
+    nextBtn.addEventListener('click', () => {
+        if(currentPage < totalPages) {
+            currentPage++;
+            updatePage();
+            window.scrollTo(0,0);
+            // Si la nueva página es la 4, además forzar música
+            if(currentPage === 4 && audio && audio.paused && !musicStarted) {
+                setTimeout(() => {
+                    audio.play().catch(() => {});
+                }, 200);
+            }
+        }
+    });
+
+    prevBtn.addEventListener('click', () => {
+        if(currentPage > 1) {
+            currentPage--;
+            updatePage();
+            window.scrollTo(0,0);
+        }
+    });
+    
+    // Función que muestra el mensaje de aceptación sin captura, solo romántico
+    function showAcceptanceMessage() {
+        // Pausar música ligeramente para dar énfasis pero no es necesario, pero la dejamos sonando de fondo
+        const modal = document.getElementById('acceptModal');
+        modal.style.display = 'flex';
+        
+        // Explosión de corazones y pétalos para celebrar
+        for(let i=0; i<150; i++) {
+            setTimeout(() => {
+                const extra = document.createElement('div');
+                extra.className = 'petal';
+                extra.innerHTML = ['❤️', '💖', '💘', '💗', '🌸', '🌼', '✨', '🎉'][Math.floor(Math.random()*8)];
+                extra.style.left = Math.random() * 100 + 'vw';
+                extra.style.top = Math.random() * 100 + 'vh';
+                extra.style.fontSize = (Math.random() * 45 + 15) + 'px';
+                extra.style.animationDuration = '1.2s';
+                extra.style.opacity = '0.95';
+                document.body.appendChild(extra);
+                setTimeout(() => extra.remove(), 1400);
+            }, i*12);
+        }
+        
+        // Efecto de confeti de corazones adicional
+        const interval = setInterval(() => {
+            const heartFall = document.createElement('div');
+            heartFall.innerHTML = '❤️';
+            heartFall.style.position = 'fixed';
+            heartFall.style.left = Math.random() * 100 + 'vw';
+            heartFall.style.top = '-10px';
+            heartFall.style.fontSize = (Math.random() * 30 + 20) + 'px';
+            heartFall.style.zIndex = '999';
+            heartFall.style.pointerEvents = 'none';
+            heartFall.style.animation = 'fall 1.2s linear forwards';
+            document.body.appendChild(heartFall);
+            setTimeout(() => heartFall.remove(), 1300);
+        }, 70);
+        setTimeout(() => clearInterval(interval), 2000);
+    }
+    
+    // Botón de Sí (aceptar)
+    const yesButton = document.getElementById('bigYesBtn');
+    if(yesButton) {
+        yesButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            showAcceptanceMessage();
+        });
+    }
+    
+    // Cerrar modal de aceptación
+    const closeModalBtn = document.getElementById('closeAcceptBtn');
+    closeModalBtn.addEventListener('click', () => {
+        document.getElementById('acceptModal').style.display = 'none';
+        // Opcional: mostrar un mensaje flotante sutil pero no invasivo
+        const toast = document.createElement('div');
+        toast.innerText = '💖 ¡Eres lo más lindo, siempre serás mi amor! 💖';
+        toast.style.position = 'fixed';
+        toast.style.bottom = '30px';
+        toast.style.left = '50%';
+        toast.style.transform = 'translateX(-50%)';
+        toast.style.backgroundColor = '#e91e63';
+        toast.style.color = 'white';
+        toast.style.padding = '12px 25px';
+        toast.style.borderRadius = '80px';
+        toast.style.fontFamily = 'Dancing Script';
+        toast.style.fontSize = '1.2rem';
+        toast.style.zIndex = '300';
+        toast.style.boxShadow = '0 0 20px gold';
+        toast.style.opacity = '0.9';
+        toast.style.whiteSpace = 'nowrap';
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3500);
+    });
+    
+    // Configuración de música: volumen suave
+    audio.volume = 0.5;
+    audio.loop = true;
+    
+    // Agregar efecto de llama aleatoria a las velas
+    setInterval(() => {
+        let flicker = document.querySelector('.candle-flicker');
+        if(flicker) {
+            let randomScale = 1 + Math.random() * 0.1;
+            flicker.style.transform = `scale(${randomScale})`;
+        }
+    }, 700);
+    
+    // Frases flotantes románticas extra (más labia)
+    function addFloatingPhrase() {
+        const phrases = [
+            "🌹 Eres más hermosa que la Luna llena", 
+            "🎶 Mi corazón late por ti", 
+            "💕 Contigo todo es mejor", 
+            "✨ Eres mi sueño hecho realidad", 
+            "🌙 Alejandra, mi estrella favorita",
+            "🎸 Eres la musa de mi canción eterna",
+            "❤️ Te elijo hoy, mañana y siempre"
+        ];
+        const phraseDiv = document.createElement('div');
+        phraseDiv.textContent = phrases[Math.floor(Math.random() * phrases.length)];
+        phraseDiv.style.position = 'fixed';
+        phraseDiv.style.bottom = '70px';
+        phraseDiv.style.right = '20px';
+        phraseDiv.style.backgroundColor = 'rgba(0,0,0,0.65)';
+        phraseDiv.style.color = '#ffd8a9';
+        phraseDiv.style.padding = '8px 20px';
+        phraseDiv.style.borderRadius = '50px';
+        phraseDiv.style.fontSize = '1rem';
+        phraseDiv.style.zIndex = '99';
+        phraseDiv.style.fontFamily = 'Dancing Script';
+        phraseDiv.style.fontWeight = 'bold';
+        phraseDiv.style.pointerEvents = 'none';
+        phraseDiv.style.animation = 'fadeInUp 2s ease-out forwards';
+        document.body.appendChild(phraseDiv);
+        setTimeout(() => phraseDiv.remove(), 4000);
+    }
+    setInterval(addFloatingPhrase, 11000);
+    
+    // Inicializar página
+    updatePage();
+</script>
+</body>
+</html>
